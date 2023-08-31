@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Age calculator app</title>
+
+  <style>
+    body{
+      background-color: hsl(0, 0%, 94%);
+    }
+    .main-div{
+      margin-left: auto;
+      margin-right: auto;
+      width: 12cm;
+      margin-top: 20%;
+      border: none;
+      border-radius: 20px;
+      border-bottom-right-radius: 150px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      padding-left: 50px;
+      padding-right: 20px;
+      background-color: hsl(0, 0%, 100%);
+    }
+    .day-div{
+      float: left;
+    }
+    .month-div{
+      float: left;
+    }
+    .input-element{
+      font-size: 32px;
+      width: 90px;
+      margin-right: 15px;
+      margin-top: 5px;
+      border: 1px solid black;
+      border-radius: 10px;
+      padding-left: 15px;
+
+    }
+    .results{
+      font-size: x-large;
+    }
+    .button{
+      background: transparent;
+      border: none;
+      width: none;
+      cursor: pointer;
+    }
+    .line{
+      float: left;
+      padding-right: 350px;
+      margin-top: 30px;
+    }
+    .button-image{
+      background-image: none;
+      background-color: hsl(259, 100%, 65%);
+      border-radius: 40px;
+    }
+    .error-msg{
+      font-size: 10px;
+      color: red;
+    }
+    label{
+      font-size: smaller;
+    }
+    .year-result{
+      display: inline;
+      font-size: 50px;
+      color: hsl(259, 100%, 65%);
+    }
+    .year{
+      display: inline;
+      font-size: 40px;
+    }
+    .month-result{
+      display: inline;
+      font-size: 50px;
+      color: hsl(259, 100%, 65%);
+    }
+    .month{
+      display: inline;
+      font-size: 40px;
+    }
+    .day-result{
+      display: inline;
+      font-size: 50px;
+      color: hsl(259, 100%, 65%);
+    }
+    .day{
+      display: inline;
+      font-size: 40px;
+    }
+    .changeImageColor{
+      background-color: black;
+    }
+    .attribution { font-size: 11px; text-align: center;
+      margin-top: 90px;
+    }
+    .attribution a { color: hsl(228, 45%, 44%); }
+  </style>
+</head>
+<body>
+
+  <div class="main-div">
+
+    <div class="day-div">
+      <label class="js-label">DAY</label><br>
+      <input type="tel" class="input-element js-day" placeholder="DD">
+      <p class="error-msg"></p>
+    </div>
+
+    <div class="month-div">
+      <label class="js-label">MONTH</label><br>
+      <input type="tel" class="input-element js-month" placeholder="MM">
+      <p class="error-msg"></p>
+    </div>
+
+    <div class="year-div">
+      <label class="js-label">YEAR</label><br>
+      <input type="tel" class="input-element js-year" placeholder="YYYY">
+      <p class="error-msg"></p>
+    </div>
+
+    <div class="line-and-image">
+      <hr class="line">
+      <button class="button js-button" onmousemove="changeButtonColor();"><svg class="button-image js-image" xmlns="http://www.w3.org/2000/svg" width="46" height="44" viewBox="0 0 46 44"><g fill="none" stroke="#FFF" stroke-width="2"><path d="M1 22.019C8.333 21.686 23 25.616 23 44M23 44V0M45 22.019C37.667 21.686 23 25.616 23 44"/></g></svg></button>
+    </div>
+
+    <div class="results">
+      <p class="year-result js-year-result">--</p><p class="year">years</p><br>
+      <p class="month-result js-month-result">--</p><p class="month">months</p><br>
+      <p class="day-result js-day-result">--</p><p class="day">days</p>
+    </div>
+
+  </div>
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">ASHRAFU RASHID ISSA</a>.
+  </div>
+
+  <script>
+    const day = document.querySelector('.js-day');
+    const month = document.querySelector('.js-month');
+    const year = document.querySelector('.js-year');
+    const yearResult = document.querySelector('.js-year-result');
+    const monthResult = document.querySelector('.js-month-result');
+    const dayResult = document.querySelector('.js-day-result');
+    const button = document.querySelector('.js-button');
+    const  buttonImage = document.querySelector('.js-image');
+    const labels = document.querySelector('.js-label');
+
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      daysCalculation();
+      monthCalculation();
+      yearCalculation();
+
+      //day input validation
+      if (day.value == ''){
+        error(day, 'This field is required');
+      }else{
+        succes(day);
+      }
+
+      //month input validation 
+      if (month.value == ''){
+        error(month, 'This field is required');
+      }else{
+        succes(month);
+      }
+
+      //year input validation
+      if (year.value == ''){
+        error(year, 'This field is required');
+      }else{
+        succes(year);
+      }
+
+    })
+
+    buttonImage.addEventListener('mouseenter', (event) => {
+      event.currentTarget.classList.add('changeImageColor');
+
+    })
+
+    buttonImage.addEventListener('mouseleave', (event) => {
+      event.currentTarget.classList.remove('changeImageColor');
+
+    })
+
+    function daysCalculation(){
+      const days = Number(day.value);
+      const resultForDays = 31 - days;
+      dayResult.innerHTML = `${resultForDays}`;
+    }
+
+    function monthCalculation(){
+      const months = Number(month.value);
+      const resultForMonths = 12 - months;
+      monthResult.innerHTML = `${resultForMonths}`;
+    }
+
+    function yearCalculation(){
+      const years = Number(year.value);
+      const resultForYears = 2023 - years;
+      yearResult.innerHTML = `${resultForYears}`;
+    }
+
+    function error(element, msg){
+      element.style.border = `1px red solid`;
+      const parent = element.parentElement;
+      const p = parent.querySelector('p');
+      p.textContent = msg;
+      p.style.visibility = 'visible';
+      labels.style.color = 'red';
+
+    }
+
+    function succes(element){
+      element.style.border = `3px purple solid`;
+      const parent = element.parentElement;
+      const p = parent.querySelector('p');
+      p.style.visibility = 'hidden';
+      labels.style.color = 'black';
+      
+    }
+
+  </script>
+
+</body>
+</html>
